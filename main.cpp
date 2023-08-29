@@ -26,6 +26,5 @@ int main(int argc, char* argv[])
         OutputAnswerText (nRoots, x1, x2);
     }
 
-    return 0;
-
+    return 0;  
 }
