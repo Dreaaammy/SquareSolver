@@ -1,5 +1,5 @@
 #ifndef CHECKING_TESTS_H
-#define CHECKING_TESTS_H
+#define CHECKING_TESTS_H  // header guard
 
 struct TestData
 {
