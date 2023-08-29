@@ -8,44 +8,40 @@
 #include "solve.h"
 #include "checking_tests.h"
 #include "equal_checking.h"
-#include "constants.h"
 #include "input_output.h"
 
+// Функция полчает структуру TestData, содержащую коэффицентах и верные ответы для них,
+// сравнивает значения с теми, что выдает SolveSquare(), проверяя верность функции.
+// В случае ошибки выведет уравнение, которое SolveSquare решает неверно
 void RunOneTest (const TestData ref)
 {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    short unsigned int greenColour = 10;
-    short unsigned int redColour   = 12;
-    short unsigned int whiteColour = 7;
-
     double x1 = 0, x2 = 0;
     SolveSquare(ref.a, ref.b, ref.c, &x1, &x2);
 
     if ((IsEqual(x1, ref.x1) && IsEqual(x2, ref.x2)) ||
         (IsEqual(x2, ref.x1) && IsEqual(x1, ref.x2)))
     {
-        SetConsoleTextAttribute(hConsole, greenColour);
-        printf ("TEST CORRECT\n");
-        SetConsoleTextAttribute(hConsole, whiteColour);
+        ColorPrinting (green, "Test Correct\n");
     }
     else
     {
-        SetConsoleTextAttribute(hConsole,  redColour);
-        printf ("TEST FAILED:\n"
+        ColorPrinting (red, "TEST FAILED:\n"
                 "\tEquation:\n\t\t");
 
-        PrintEquation(ref.a, ref.b, ref.c);
+        PrintEquation (red, ref.a, ref.b, ref.c);
 
-        printf("\t\tExpected:\n"
+        EnableColor (red);
+        printf ("\t\tExpected:\n"
                 "\t\tx1 = %lg, x2 = %lg\n"
                 "\t\tGot:\n"
                 "\t\tx1 = %lg, x2 = %lg\n\n",
                 ref.x1, ref.x2, x1, x2);
-        SetConsoleTextAttribute(hConsole, whiteColour);
+        DisableColor ();
     }
-
 }
 
+// Функция проверет все тесты,
+// содержащиеся в текстовом файле, используя RunOneTest()
 void RunAllTests()
 {
     FILE *allTestsFile = fopen("Tests.txt", "r");
