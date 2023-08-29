@@ -5,9 +5,10 @@
 
 #include "solve.h"
 #include "input_output.h"
-#include "constants.h"
 #include "equal_checking.h"
 
+// Функция получает на вход количество корней,
+// их значения и выводит в соответсвующем виде
 void OutputAnswerText (int nRoots, const double x1, const double x2)
 {
     switch (nRoots)
@@ -38,38 +39,51 @@ void OutputAnswerText (int nRoots, const double x1, const double x2)
     }
 }
 
+// Функция выводит приветственный текст
 void PrintHelloText()
 {
     printf ("# Square equation solver\n"
             "# (C) Liapin Aleksey, 2017\n\n");
 }
 
+// Функция выводит текст,
+// предлагающий ввести коэффиценты
 void PrintRequestNumbersEnter()
 {
     printf ("# Enter a, b, c: \n");
 }
 
-void InputCoeffs (double* a, double* b, double* c)
+//
+int InputCoeffs (double* a, double* b, double* c)
 {
-    while (scanf ("%lf %lf %lf", a, b, c) != 3)
+    printf ("Please enter three numbers:\n");
+    int check = 0;
+    while ((check = scanf ("%lf %lf %lf", a, b, c)) != 3 && check != EOF)
     {
-        printf ("Please enter three numbers:\n");
         FlushBuffer ();
-        return;
     }
-    printf("Try again");
-    InputCoeffs(a, b, c);
-    return;
+
+    if (check == EOF) {
+        printf("EOF reached\n");
+        return 1;
+    }
+
+    return 0;
 }
 
+// Функция очищает буфер
 void FlushBuffer()
 {
-    int check = 0;
-    while ((check = getchar()) != '\n' && check != EOF);
+    while (getchar() != '\n');
 }
 
-void PrintEquation (const double a, const double b, const double c)
+// Функция получает на вход коэффиценты уравнения, цвет,
+// печатает его в математическом виде
+void PrintEquation (const Color color, const double a, const double b, const double c)
 {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, color);
+
     if      (IsEqual(a,  1)) printf("x^2 ");
     else if (IsEqual(a, -1)) printf("-x^2 ");
     else if (!IsZero(a))     printf("%.3lgx^2 ", a);
@@ -85,5 +99,32 @@ void PrintEquation (const double a, const double b, const double c)
 
     if (c < 0)  printf("- %.3lg = 0\n", fabs(c));
     else        printf("+ %.3lg = 0\n", fabs(c));
+
+    SetConsoleTextAttribute(hConsole, white);
 }
 
+// Функция получает цвет и текст,
+// который выводит в соответсвующем цвете
+void ColorPrinting (const Color color, const char text[])
+{
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    SetConsoleTextAttribute(hConsole, color);
+    printf ("%s", text);
+    SetConsoleTextAttribute(hConsole, white);
+}
+
+// Функция получает на вход цвет (color),
+// перекрашивает весь следующий текст в этот цвет
+void EnableColor (const Color color)
+{
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, color);
+}
+
+// Функция отменяет перекрашивание текста
+void DisableColor ()
+{
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, white);
+}
