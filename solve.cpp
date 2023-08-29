@@ -4,9 +4,10 @@
 #include <assert.h>
 
 #include "solve.h"
-#include "constants.h"
 #include "equal_checking.h"
 
+// Функция получает коэффиценты квадратного уравнения,
+// решает его, находя корни и выводит их количество
 int SolveSquare (const double a, const double b, const double c, double* x1, double* x2)
 {
     assert (isfinite (a));
@@ -45,7 +46,8 @@ int SolveSquare (const double a, const double b, const double c, double* x1, dou
     }
 }
 
-
+// Функция, получая коэффиценты, решает линейное уравнение,
+// находит его корни, выводит их количество
 int SolveLinear (double b, double c, double* x1)
 {
     if (IsZero(b))
@@ -58,4 +60,5 @@ int SolveLinear (double b, double c, double* x1)
         return ONE_ROOT;
     }
 }
+
 
